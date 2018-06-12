@@ -1,0 +1,9 @@
+<div class="column-3-4">
+  <div class="user-questions buffer-both">
+    <div class="questions-list">
+      <% for question in @questions do %>
+        <%= render partial: 'questions/question', locals: {question: question} %>
+      <% end %>
+    </div>
+  </div>
+</div>
