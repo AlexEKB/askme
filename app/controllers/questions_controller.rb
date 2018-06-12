@@ -2,7 +2,7 @@ class QuestionsController < ApplicationController
 
   before_action :load_question, only: [:show, :edit, :update, :destroy]
 
-  before_action :authorize_user, except: [:create]
+  before_action :authorize_user, except: [:create, :index]
 
   def index
     @questions = if params[:hashtag]

@@ -25,7 +25,16 @@
       <!-- Локализованный вывод даты вопроса в коротком формате -->
       <%= l(question.created_at, format: :short) %>
     </div>
+
+    <div class="question-hashtags">
+      <% question.hashtags.each do |hashtag| %>
+        <%= link_to "##{hashtag.name}", questions_path(hashtag: hashtag.name) %>
+      <% end %>
+    </div>
+
   </div>
+
+
 
   <!-- Простая авторизация: только владелец вопроса может его редактировать -->
   <% if question.user == current_user %>
