@@ -17,6 +17,8 @@ gem 'puma', '~> 3.11'
 
 gem 'rails_12factor'
 
+gem 'recaptcha', require: 'recaptcha/rails'
+
 gem 'bootsnap', '>= 1.1.0', require: false
 
 group :development, :test do
