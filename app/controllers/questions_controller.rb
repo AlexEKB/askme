@@ -20,7 +20,7 @@ class QuestionsController < ApplicationController
   def create
     @question = Question.new(question_params)
 
-    if @question.save
+    if check_captcha(@question) && @question.save
       redirect_to user_path(@question.user), notice: 'Ваш вопрос задан'
     else
       render :edit
@@ -45,23 +45,30 @@ class QuestionsController < ApplicationController
 
   private
 
-    # Use callbacks to share common setup or constraints between actions.
-    def load_question
-      @question = Question.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def load_question
+    @question = Question.find(params[:id])
+  end
 
-    def authorize_user
-      reject_user unless @question.user == current_user
-    end
-
+  def authorize_user
+    reject_user unless @question.user == current_user
+  end
 
   # Only allow a trusted parameter "white list" through.
-    def question_params
-      # защита от уязвимости -- пользователь может менять ответы только у собственных вопросов
-      if current_user.present? && params[:question][:user_id].to_i == current_user.id
-        params.require(:question).permit(:user_id, :text, :answer)
-      else
-        params.require(:question).permit(:user_id, :text)
-      end
+  def question_params
+    # защита от уязвимости -- пользователь может менять ответы только у собственных вопросов
+    if current_user.present? && params[:question][:user_id].to_i == current_user.id
+      params.require(:question).permit(:user_id, :text, :answer)
+    else
+      params.require(:question).permit(:user_id, :text)
     end
+  end
+
+  def check_captcha(model)
+    if current_user.present?
+      true
+    else
+      verify_recaptcha(model: model)
+    end
+  end
 end
